@@ -56,8 +56,8 @@ class DHZDymoDirectPrintController(http.Controller):
             if not docids:
                 return Response("<h3>Eroare: lipsesc ids</h3>", status=400, content_type="text/html")
 
-            # Recordset
-            records = request.env[model].sudo().browse(docids)
+            # Recordset (include archived products)
+            records = request.env[model].sudo().with_context(active_test=False).browse(docids)
 
             # determină pricelist
             pricelist = None
