@@ -9,7 +9,6 @@
     "category": "Productivity",
     "depends": ["web", "product"],
     "data": [
-        "data/params.xml",
         "views/product_views.xml",
         "views/dhz_dymo_label_override.xml",
     ],
