@@ -44,9 +44,18 @@
                         text-align:left; font-size:12pt; line-height:1.0;">
 
               <!-- SUS: Titlul produsului -->
-              <div style="width:100%; max-height:20mm; overflow:hidden;">
-                <div style="font-weight:bold; font-size:11pt; line-height:1.1;">
-                  <t t-esc="product.name"/>
+              <div style="width:100%; max-height:22mm; overflow:hidden; word-wrap:break-word;">
+                <t t-set="name_length" t-value="len(product.name or '')"/>
+                <div style="font-weight:bold; line-height:1.1;">
+                  <t t-if="name_length &lt;= 40">
+                    <span style="font-size:11pt;" t-esc="product.name"/>
+                  </t>
+                  <t t-if="name_length &gt; 40 and name_length &lt;= 80">
+                    <span style="font-size:9pt;" t-esc="product.name"/>
+                  </t>
+                  <t t-if="name_length &gt; 80">
+                    <span style="font-size:7pt;" t-esc="product.name"/>
+                  </t>
                 </div>
               </div>
 
