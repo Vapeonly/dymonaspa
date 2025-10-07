@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="dhz_dymo_label_override" model="ir.ui.view">
+    <field name="name">DHZ – Etichetă LPN + QR</field>
+    <field name="inherit_id" ref="product.report_simple_label_dymo"/>
+    <field name="priority" eval="99"/>
+    <field name="active" eval="1"/>
+    <field name="arch" type="xml">
+      <xpath expr="//*[contains(concat(' ', normalize-space(@class), ' '), ' o_label_full ')]" position="replace">
+        <!-- Setări utile -->
+        <t t-set="tmpl" t-value="product.product_tmpl_id if (product._name == 'product.product') else product"/>
+        <t t-set="qr_url" t-value="'https://www.dhz.ro/shop/%s' % tmpl.id"/>
+
+        <div class="o_label_full" style="width:55mm; height:55mm; padding:0.5mm; font-size:10pt; line-height:1.1;">
+          <!-- Tabel cu QR și text -->
+          <table style="width:100%; margin-bottom:1mm;">
+            <tr>
+              <!-- Coloană QR -->
+              <td style="width:25mm; text-align:left; vertical-align:left;">
+                <div t-out="qr_url"
+                     t-options="{
+                       'widget': 'barcode',
+                       'symbology': 'QR',
+                       'humanreadable': 0,
+                       'quiet': 2,
+                       'img_style': 'width:25mm; height:25mm;'
+                     }"/>
+              </td>
+
+              <!-- Coloană text -->
+              <td style="padding-left:1mm; font-size:10pt; text-align:center; vertical-align:middle;">
+                <div>
+                  <strong>Scanează QR pentru preț și detalii produs</strong><br/>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Etichetă 60x60mm -->
+          <t t-name="product.label.60x60.custom">
+            <div class="page"
+                 style="width:55m; height:30m; padding:1mm;
+                        display:flex; flex-direction:column; justify-content:space-between; align-items:center;
+                        text-align:left; font-size:20pt;">
+
+              <!-- SUS: Titlul produsului -->
+              <div style="width:100%;">
+                <div style="font-weight:bold; line-height:1.1;">
+                  <t t-esc="product.name"/>
+                </div>
+              </div>
+
+              <!-- JOS: Cod de bare + text LPN -->
+              <t t-if="product.x_studio_lpn_code">
+                <div style="width:100%; align-items:center;">
+                  <div t-out="product.x_studio_lpn_code"
+                       t-options="{
+                         'widget': 'barcode',
+                         'symbology': 'Code128',
+                         'humanreadable': 0,
+                         'quiet': 0,
+                         'img_style': 'width:55mm; height:5mm;'
+                       }"/>
+                  <div style="text-align:center; font-size:10pt; margin-top:1mm;">
+                    <strong><span t-out="product.x_studio_lpn_code"/></strong>
+                  </div>
+                </div>
+              </t>
+
+              <t t-if="not product.x_studio_lpn_code">
+                <div style="font-size:10pt; opacity:0;">LPN indisponibil</div>
+              </t>
+
+            </div>
+          </t>
+
+        </div>
+      </xpath>
+    </field>
+  </record>
+</odoo>
